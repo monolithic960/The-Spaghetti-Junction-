@@ -10,12 +10,12 @@ Single-file static site (`index.html`) for The Spaghetti Junction, 4510 Charlest
 
 ## What's in here
 
-- Mobile-first one-pager: hero → Sunday AYCE ribbon → full HTML menu → catering → about → reviews → map/hours → footer
-- `Restaurant` JSON-LD schema (address, hours, rating, sameAs) — the old site has none
+- Loud, dense, fast-food-style one-pager in the brand's real colors (logo red/green/yellow): marquee bar → hero (real spaghetti photo) → Sunday AYCE deal band → order-your-way → full HTML menu with photos woven in → catering mega-section → gallery → loyalty QR + review CTA → about → 6 real reviews → map/hours → hiring strip → footer
+- `Restaurant` JSON-LD schema (address, hours, rating, images, sameAs) — the old site has none
 - Open-now badge (JS, Indiana time, fails safe to static hours text)
 - Sticky mobile bar: Call / Directions / Order
 - One primary CTA throughout: **Order Online** (Toast)
-- Zero images = nothing to slow it down. Line-art SVG until real photography exists.
+- `images/` — all 13 content images pulled from the current Hibu/Yext CDNs (logo, food shots, catering spread, loyalty QR, DoorDash logo) so nothing breaks when Hibu is cancelled. `yext1/2/4.png` are heavy (1.3–2.8 MB) — recompress to WebP before launch.
 
 ## Confirm with the owner before launch
 
