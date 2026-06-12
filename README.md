@@ -1,6 +1,13 @@
-# The Spaghetti Junction — one-page site
+# The Spaghetti Junction — one-page site, two styles
 
-Single-file static site (`index.html`) for The Spaghetti Junction, 4510 Charlestown Rd, New Albany, IN. No build step, no dependencies — deploy anywhere that serves HTML.
+Static site for The Spaghetti Junction, 4510 Charlestown Rd, New Albany, IN. No build step, no dependencies — deploy anywhere that serves HTML (`netlify.toml` included, publish dir = root).
+
+**Two complete designs, switchable via the black "MONOLITH · DESIGN PREVIEW" strip at the top of each page:**
+
+- `index.html` — **Style 01: Fast & Loud.** Brand-true red/green/yellow, Anton/Lilita type, dense menu, catering mega-section. The client-facing default.
+- `classic.html` — **Style 02: Warm Classic.** Cream/cocoa/burnt-orange, Fraunces serif, editorial spacing. Marked `noindex` so it never competes with index in search.
+
+When the owner picks a style: delete the losing file, remove the `.demo-strip` block (HTML + CSS) from the winner, and drop the `noindex` meta if classic wins.
 
 ## Deploy
 
@@ -15,7 +22,7 @@ Single-file static site (`index.html`) for The Spaghetti Junction, 4510 Charlest
 - Open-now badge (JS, Indiana time, fails safe to static hours text)
 - Sticky mobile bar: Call / Directions / Order
 - One primary CTA throughout: **Order Online** (Toast)
-- `images/` — all 13 content images pulled from the current Hibu/Yext CDNs (logo, food shots, catering spread, loyalty QR, DoorDash logo) so nothing breaks when Hibu is cancelled. `yext1/2/4.png` are heavy (1.3–2.8 MB) — recompress to WebP before launch.
+- `images/` — all content images pulled from the current Hibu/Yext CDNs (logo, food shots, catering spread, loyalty QR, DoorDash logo) so nothing breaks when Hibu is cancelled. The heavy Yext PNGs were recompressed to JPEG (1.3–2.8 MB → 78–218 KB each); total image weight is now ~1 MB.
 
 ## Confirm with the owner before launch
 
