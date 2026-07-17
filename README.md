@@ -1,13 +1,8 @@
-# The Spaghetti Junction — one-page site, two styles
+# The Spaghetti Junction — one-page site
 
 Static site for The Spaghetti Junction, 4510 Charlestown Rd, New Albany, IN. No build step, no dependencies — deploy anywhere that serves HTML (`netlify.toml` included, publish dir = root).
 
-**Two complete designs, switchable via the black "MONOLITH · DESIGN PREVIEW" strip at the top of each page:**
-
-- `index.html` — **Style 01: Fast & Loud.** Brand-true red/green/yellow, Anton/Lilita type, dense menu, catering mega-section. The client-facing default.
-- `classic.html` — **Style 02: Warm Classic.** Cream/cocoa/burnt-orange, Fraunces serif, editorial spacing. Marked `noindex` so it never competes with index in search.
-
-When the owner picks a style: delete the losing file, remove the `.demo-strip` block (HTML + CSS) from the winner, and drop the `noindex` meta if classic wins.
+**`index.html`** — the finished site. Fast & Loud direction: brand-true red/green/yellow, Anton/Lilita display type, dense photo menu, catering mega-section. The style switcher and the alternate "Warm Classic" design have been removed; the classic design is recoverable from git commit `21f3c4d` (`classic.html`) if ever needed.
 
 ## Deploy
 
