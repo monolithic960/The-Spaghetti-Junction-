@@ -332,6 +332,28 @@ footer{background:var(--ink);color:#e8ddd2;padding:38px 0 120px;font-size:.92rem
 .credit a{color:#c9b8a8}
 @media(min-width:881px){footer{padding-bottom:38px}}
 
+/* ============ inquiry form ============ */
+.inquiry{background:var(--green);border-top:3px solid var(--ink);padding:50px 0}
+.inquiry .sec-title{color:#fff;text-shadow:3px 3px 0 var(--ink)}
+.inquiry-lead{color:#fff;font-weight:600;max-width:40em;margin-bottom:24px}
+.inquiry-card{background:#fff;border:3px solid var(--ink);border-radius:16px;box-shadow:6px 6px 0 var(--ink);padding:26px;max-width:660px}
+.inquiry-form{display:grid;gap:14px}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:560px){.field-row{grid-template-columns:1fr}}
+.field label{display:block;font-family:'Lilita One',Verdana,sans-serif;font-size:.85rem;text-transform:uppercase;margin-bottom:5px}
+.field input,.field select,.field textarea{
+  width:100%;font-family:'Inter',system-ui,sans-serif;font-size:1rem;
+  padding:11px 13px;border:2.5px solid var(--ink);border-radius:10px;background:var(--cream);color:var(--ink);
+}
+.field textarea{min-height:96px;resize:vertical}
+.field input:focus,.field select:focus,.field textarea:focus{outline:3px solid var(--yellow-dk);outline-offset:1px}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.inquiry .btn{width:100%;font-size:1.15rem}
+.form-note{font-size:.85rem;color:#54443c;margin:2px 0 0}
+.form-msg{font-family:'Lilita One',Verdana,sans-serif;text-align:center;padding:12px;border-radius:10px;border:2.5px solid var(--ink);display:none;margin:0}
+.form-msg.ok{display:block;background:var(--green);color:#fff}
+.form-msg.err{display:block;background:var(--yellow);color:var(--ink)}
+
 /* ============ mobile sticky bar ============ */
 .sticky-bar{
   position:fixed;bottom:0;left:0;right:0;z-index:120;display:none;
@@ -695,6 +717,53 @@ footer{background:var(--ink);color:#e8ddd2;padding:38px 0 120px;font-size:.92rem
   </div>
 </section>
 
+<!-- ============ INQUIRY / CONTACT ============ -->
+<section class="inquiry" id="contact">
+  <div class="wrap">
+    <h2 class="sec-title anton"><span class="mark">Get a Quote / Say Hi</span></h2>
+    <p class="inquiry-lead">Planning a catering order or have a question? Drop it here and we'll get right back to you — usually the same day.</p>
+    <div class="inquiry-card">
+      <form class="inquiry-form" id="lead-form" novalidate>
+        <div class="field-row">
+          <div class="field">
+            <label for="lf-name">Name</label>
+            <input id="lf-name" name="name" type="text" autocomplete="name" maxlength="120">
+          </div>
+          <div class="field">
+            <label for="lf-phone">Phone</label>
+            <input id="lf-phone" name="phone" type="tel" autocomplete="tel" maxlength="20">
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="lf-email">Email</label>
+            <input id="lf-email" name="email" type="email" autocomplete="email" maxlength="200">
+          </div>
+          <div class="field">
+            <label for="lf-service">What's this about?</label>
+            <select id="lf-service" name="service">
+              <option>Catering quote</option>
+              <option>Large / party order</option>
+              <option>General question</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label for="lf-message">Details</label>
+          <textarea id="lf-message" name="message" maxlength="2000" placeholder="Date, headcount, what you're hungry for…"></textarea>
+        </div>
+        <div class="field hp" aria-hidden="true">
+          <label for="lf-website">Leave this empty</label>
+          <input id="lf-website" name="website" type="text" tabindex="-1" autocomplete="off">
+        </div>
+        <button class="btn red" type="submit" id="lf-submit">Send it →</button>
+        <p class="form-note">Prefer to talk? Call <a href="tel:+18123014404"><b>(812) 301-4404</b></a>.</p>
+        <p class="form-msg" id="lf-msg" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+  </div>
+</section>
+
 <!-- ============ HIRING ============ -->
 <section class="hiring">
   <div class="wrap">
@@ -760,6 +829,47 @@ footer{background:var(--ink);color:#e8ddd2;padding:38px 0 120px;font-size:.92rem
     });
     document.getElementById('yr').textContent = new Date().getFullYear();
   }catch(e){/* static text stays */}
+})();
+
+/* Catering / contact lead → Monolith funnel backend. Fails soft; never blocks the page. */
+(function(){
+  var form = document.getElementById('lead-form');
+  if(!form) return;
+  var ENDPOINT = 'https://monolithsystems.dev/api/funnel/lead/';
+  var ORG = 'the-spaghetti-junction';
+  var btn = document.getElementById('lf-submit');
+  var msg = document.getElementById('lf-msg');
+  function show(kind, text){ msg.className = 'form-msg ' + kind; msg.textContent = text; }
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var name  = form.name.value.trim();
+    var email = form.email.value.trim();
+    var phone = form.phone.value.trim();
+    if(!email && !phone){ show('err', 'Add an email or phone so we can reply.'); return; }
+    var origLabel = btn.textContent;
+    btn.disabled = true; btn.textContent = 'Sending…';
+    fetch(ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        orgSlug: ORG,
+        name: name,
+        email: email,
+        phone: phone,
+        message: form.message.value.trim(),
+        service: form.service.value,
+        source: 'website',
+        website: form.website.value   /* honeypot — real users leave empty */
+      })
+    })
+    .then(function(r){ return r.ok; })
+    .then(function(ok){
+      if(ok){ form.reset(); show('ok', "Got it — thanks! We'll be in touch shortly."); }
+      else  { show('err', "That didn't go through. Please call (812) 301-4404."); }
+    })
+    .catch(function(){ show('err', "Network hiccup — please call (812) 301-4404."); })
+    .then(function(){ btn.disabled = false; btn.textContent = origLabel; });
+  });
 })();
 </script>
 </body>
